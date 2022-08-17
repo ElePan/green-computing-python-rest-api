@@ -2,6 +2,9 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_restful import Api, Resource
+from codecarbon import EmissionsTracker
+from codecarbon import track_emissions
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -65,8 +68,20 @@ class PostResource(Resource):
         db.session.commit()
         return '', 204
 
+class HealthResource(Resource):
+    @track_emissions
+    def get(self):
+        return 200
+
+class HelloResource(Resource):
+    def get(self):
+        with EmissionsTracker() as tracker:
+            print('Hola')
+        return 204
 
 api.add_resource(PostListResource, '/posts')
+api.add_resource(HealthResource, '/health')
+api.add_resource(HelloResource, '/hello')
 api.add_resource(PostResource, '/posts/<int:post_id>')
 
 
