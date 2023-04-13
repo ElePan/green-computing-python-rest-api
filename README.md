@@ -15,6 +15,13 @@ pip install Flask
 pip install -r .\requirements.txt --upgrade
 ```
 
+## How to run the tests
+To run the tests in the folder of the same name
+```
+python -m unittest discover
+```
+Terminal stdout will return electricity used in the test
+
 ## Run in local
 To run the api:
 ```
